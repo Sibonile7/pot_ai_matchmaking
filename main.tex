@@ -13,6 +13,10 @@
 \usepackage{hyperref}
 \usepackage{fontspec}
 \usepackage{tcolorbox}
+\usepackage{amsmath}
+\usepackage[hidelinks]{hyperref}
+
+
 
 % ----- Fonts (XeLaTeX/LuaLaTeX) -----
 \setmainfont{Times New Roman}
@@ -103,11 +107,11 @@ Personalized dashboard \quad 5--8 top matches \quad With explanations \\
 
 We gather information from multiple sources:
 \begin{itemize}
-  \item Registration form (what people tell us)
-  \item LinkedIn (their real expertise and experience)
-  \item Company websites (institutional goals and products)
-  \item Twitter/X (what they're thinking about right now)
+  \item Registration form (self-reported role, goals, offers, and focus areas)
+  \item Public company webpage snippet via \texttt{company\_url} (opt-in; publicly available text)
+  \item \textit{Production upgrade (with consent + API access):} LinkedIn profiles and X/Twitter signals for richer enrichment
 \end{itemize}
+
 
 \subsection*{Cold Start: Making It Work with Minimal Data}
 
@@ -120,33 +124,26 @@ For new attendees or those with limited public data, we ask 3 simple questions d
 
 These three questions give the system enough signal to make useful matches even without LinkedIn scraping.
 
-\subsection*{Step 2: AI Understanding}
+\subsection*{Step 2: Profile Understanding (Prototype NLP)}
 
-An LLM reads all this information and builds a smart profile:
+The prototype builds a structured profile from the attendee’s text fields (\texttt{focus}, \texttt{looking\_for}, \texttt{offers}, \texttt{tags}) using lightweight NLP (TF-IDF + keyword normalization):
 \begin{itemize}
-  \item What is their real expertise? (not just job title)
-  \item What are they looking for? (even if not explicitly stated)
-  \item What can they offer to others?
+  \item Extract the attendee’s main themes and focus areas (beyond job title)
+  \item Represent needs (\texttt{looking\_for}) and offerings (\texttt{offers}) as comparable text signals
+  \item Support matching with transparent, interpretable features (similarity + role fit + overlap)
 \end{itemize}
 
-\subsection*{Step 3: Smart Matching}
+\textit{Production upgrade:} embeddings/LLMs can enrich profiles from longer bios and consented external sources.
 
-\textbf{Match Scoring Algorithm}
+\subsection*{Step 3: Smart Matching Scoring Algorithm}
 
 \textbf{Final Match Score =}
 \begin{itemize}
-  \item 40\% Complementarity (A wants $\leftrightarrow$ B offers)
-  \item + 30\% Role Compatibility (Investor$\leftrightarrow$Founder, Bank$\leftrightarrow$Tech)
-  \item + 20\% Topic Overlap (RWA, custody, ZK, tokenization)
-  \item + 10\% Diversity Boost (novelty factor)
-\end{itemize}
-
-\textbf{How it works:}
-\begin{itemize}
-  \item \textbf{Complementarity (40\%):} Does person A want what person B offers? Investor $\leftrightarrow$ Founder, Bank $\leftrightarrow$ Tech provider, Buyer $\leftrightarrow$ Seller
-  \item \textbf{Role Compatibility (30\%):} Are they in natural counterparty roles? Capital allocator + Capital seeker, Protocol + Enterprise customer, Regulator + Innovator
-  \item \textbf{Topic Overlap (20\%):} Shared interests in RWA, custody, ZK tech, tokenization, DeFi, compliance, etc.
-  \item \textbf{Diversity Boost (10\%):} Intentional novelty to surface unexpected but valuable connections (avoid only matching the obvious)
+  \item 40\% \textbf{Complementarity (two-way):} 
+  $0.5\cdot \mathrm{sim}(A_{\text{wants}}, B_{\text{offers}}) + 0.5\cdot \mathrm{sim}(B_{\text{wants}}, A_{\text{offers}})$
+  \item + 30\% \textbf{Role Compatibility:} natural counterparty pairs (Investor$\leftrightarrow$Founder, Operator$\leftrightarrow$Founder, Investor$\leftrightarrow$Operator)
+  \item + 20\% \textbf{Topic Overlap:} shared focus areas (e.g., RWA, custody, DeFi, ZK, identity, compliance)
+  \item + 10\% \textbf{Diversity Boost:} small novelty factor to surface non-obvious but high-value connections
 \end{itemize}
 
 \subsection*{Real Example}
@@ -210,38 +207,48 @@ We're keeping the tech stack simple and realistic for a prototype:
 \toprule
 \textbf{Component} & \textbf{Technology} \\
 \midrule
-AI Intelligence & GPT-4 (OpenAI API) for semantic understanding \\
-Data Processing & Python + API integrations (LinkedIn, web scraping) \\
-Database & PostgreSQL with pgvector extension (handles both data \& embeddings) \\
-Web App & Next.js (React) --- mobile-responsive, no separate mobile app needed \\
-Hosting & Simple cloud deployment (Vercel/Railway + managed Postgres) \\
+AI Matching & TF-IDF + weighted scoring (two-way complementarity) \\
+Data Processing & Python (pandas, scikit-learn) \\
+External Retrieval & requests + BeautifulSoup (public web snippet via \texttt{company\_url}) \\
+Data Store & CSV file (\texttt{attendees.csv}) with fictional profiles \\
+Web App & Streamlit (Python) \\
+Hosting & Streamlit Community Cloud + GitHub \\
 \bottomrule
 \end{tabular}
+
 
 \subsection*{Why these choices?}
 
 \begin{itemize}
-  \item \textbf{GPT-4:} Best semantic (understanding) for extracting meaning from unstructured text (LinkedIn bios, company descriptions)
-  \item \textbf{Python:} Standard for AI/ML work, great libraries for data processing and API integrations
-  \item \textbf{PostgreSQL + pgvector:} Handles both structured data (users, matches) and semantic embeddings for similarity search in one database
-  \item \textbf{Next.js web app:} Fast, responsive, mobile-friendly. No separate mobile app needed for prototype --- works great on phones.
+  \item \textbf{TF-IDF + weighted scoring:} Fast, interpretable baseline for matching needs/offers/tags; easy to debug and explain.
+  \item \textbf{Python:} Strong ecosystem for data handling and ML prototyping (pandas, scikit-learn).
+  \item \textbf{Streamlit:} Quick way to ship a usable web prototype with minimal UI overhead.
+  \item \textbf{Public web retrieval (requests + BeautifulSoup):} Demonstrates external enrichment using opt-in, publicly available page text.
+  \item \textbf{CSV data store:} Simple and sufficient for a small fictional dataset in a case-study prototype.
 \end{itemize}
 
-\textbf{Future enhancement:} Graph database (Neo4j) for advanced network analysis if we want multi-hop recommendations (``people who know people you should meet''). Not needed for MVP.
+\textbf{Future enhancement:} Upgrade to embeddings (e.g., pgvector) and add an organizer dashboard for importing attendees and managing introductions. Not needed for the MVP.
+
 
 \section*{Why This System is Different}
 
 \begin{tabular}{L{4.0cm}L{5.5cm}L{5.5cm}}
 \toprule
-\textbf{Feature} & \textbf{Standard Platforms} & \textbf{Our System} \\
+\textbf{Feature} & \textbf{Standard Platforms} & \textbf{Our System (Prototype)} \\
 \midrule
-Data Sources & Registration only & LinkedIn + Company + Social + More \\
-Matching Logic & Keyword overlap & AI-powered complementary matching \\
-Match Quality & 20--50 random matches & 5--8 curated high-value matches \\
-Scoring Model & None or simple tags & 4-factor weighted algorithm \\
-Explanations & None & AI-written reason for each match \\
+Data Sources & Registration only & Registration-style fields + opt-in public web snippet \\
+Matching Logic & Keyword overlap / similar profiles & Complementary matching (want$\leftrightarrow$offer) + role fit \\
+Match Quality & 20--50 broad matches & 5--8 curated, high-intent matches \\
+Scoring Model & None or simple tags & Transparent 4-factor weighted scoring (with breakdown) \\
+Explanations & Often limited or none & Clear reasons per match + conversation starters \\
 \bottomrule
 \end{tabular}
 
+\section*{Project Links}
+
+\begin{itemize}
+   \item \textbf{Figma Wireframe:} \href{https://www.figma.com/make/LiC9Hy2rV2pn94FGHeMVFU/Sibonile-Prototype-Figma?p=f&t=wwSHxT0YL52CV0A8-0&fullscreen=1}{Figma Prototype}  \item \textbf{Streamlit Prototype:} \href{https://potaimatchmaking-cjhux4hc8yh4pweadh4yrk.streamlit.app/}{potaimatchmaking.streamlit.app}
+  \item \textbf{GitHub Repository:} \href{https://github.com/Sibonile7/pot_ai_matchmaking}{github.com/Sibonile7/pot\_ai\_matchmaking}
+\end{itemize}
 
 \end{document}
