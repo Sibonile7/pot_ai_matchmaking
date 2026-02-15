@@ -94,7 +94,7 @@ with left:
             snippet = fetch_company_snippet(url)
             st.write(snippet if snippet else "Could not fetch website snippet (demo).")
 
-    k = st.slider("How many matches?", 5, 8, 8)
+    k = st.slider("Number of matches to show", 3, 10, 8)
 
 with right:
     st.subheader(f"Top {k} Matches (with reasons)")
