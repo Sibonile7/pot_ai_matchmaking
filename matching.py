@@ -174,7 +174,8 @@ def compute_matches(df: pd.DataFrame, idx: int, k: int = 8) -> List[Dict]:
         # Explanations
         why: List[str] = []
         why.append(f"Complementarity (two-way): mutual want↔offer alignment (score {comp:.2f}).")
-        why.append(f"Role fit: {a['type']} ↔ {b['type']} (score {rf:.2f}).")
+        why.append(f"Role fit: {a['type']} ↔ {b['type']} ({rf*100:.0f}%).")
+
 
         shared = sorted(list(set(a_tags).intersection(set(b_tags))))
         if shared:
