@@ -25,6 +25,27 @@ THEME_KEYWORDS = [
     "identity", "kyc", "bank", "institutional", "exchange", "privatecredit"
 ]
 
+SYNONYMS = {
+    r"\binstitutional investors?\b": "capital",
+    r"\binvestors?\b": "capital",
+    r"\blps?\b": "capital",
+    r"\bcapital allocation\b": "capital",
+    r"\bfundraising\b": "raise capital",
+    r"\bcustody\b": "custody compliance",
+    r"\bregulated\b": "compliance",
+    r"\bkyc\b": "identity compliance",
+    r"\btokenization\b": "rwa tokenization",
+    r"\bprivate credit\b": "privatecredit",
+    r"\bdefi\b": "defi yield",
+    r"\bdistribution\b": "clients distribution",
+}
+
+def normalize_text(s: str) -> str:
+    s = (s or "").lower()
+    for pat, rep in SYNONYMS.items():
+        s = re.sub(pat, rep, s)
+    return s
+
 
 def _norm_tags(tags: str) -> List[str]:
     if not isinstance(tags, str):
@@ -59,8 +80,11 @@ def novelty_boost(a_tags: List[str], b_tags: List[str], sim: float) -> float:
 
 def build_text_fields(df: pd.DataFrame) -> Tuple[pd.Series, pd.Series]:
     # Complementarity: compare A "looking_for" against B "offers"
-    want_text = (df["looking_for"].fillna("") + " " + df["focus"].fillna("") + " " + df["tags"].fillna("")).str.lower()
-    offer_text = (df["offers"].fillna("") + " " + df["focus"].fillna("") + " " + df["tags"].fillna("")).str.lower()
+    want_raw = (df["looking_for"].fillna("") + " " + df["focus"].fillna("") + " " + df["tags"].fillna(""))
+    offer_raw = (df["offers"].fillna("") + " " + df["focus"].fillna("") + " " + df["tags"].fillna(""))
+
+    want_text = want_raw.apply(normalize_text)
+    offer_text = offer_raw.apply(normalize_text)
     return want_text, offer_text
 
 
