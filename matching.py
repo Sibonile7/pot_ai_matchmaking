@@ -83,11 +83,26 @@ def compute_matches(df: pd.DataFrame, idx: int, k: int = 8) -> List[Dict]:
     want_text, offer_text = build_text_fields(df)
 
     vectorizer = TfidfVectorizer(stop_words="english", ngram_range=(1, 2), min_df=1)
-    V_offer = vectorizer.fit_transform(offer_text)
-    v_want = vectorizer.transform([want_text.iloc[idx]])
 
-    # Complementarity similarity: does B's offers match A's wants?
-    comp_sim = cosine_similarity(v_want, V_offer).flatten()
+    # Fit on both want+offer text so vocabulary covers both directions
+    all_text = pd.concat([want_text, offer_text], ignore_index=True)
+    vectorizer.fit(all_text)
+
+    V_offer = vectorizer.transform(offer_text)   # each person's offers
+    V_want  = vectorizer.transform(want_text)    # each person's wants
+
+    a_want = V_want[idx]     # A wants
+    a_offer = V_offer[idx]   # A offers
+
+    # Direction 1: A wants vs B offers
+    comp_a_to_b = cosine_similarity(a_want, V_offer).flatten()
+
+    # Direction 2: B wants vs A offers
+    comp_b_to_a = cosine_similarity(V_want, a_offer).flatten()
+
+    # Bidirectional complementarity
+    comp_sim = 0.5 * comp_a_to_b + 0.5 * comp_b_to_a
+
 
     a = df.iloc[idx]
     a_tags = _norm_tags(a.get("tags", ""))
