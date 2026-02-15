@@ -1,0 +1,247 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{titlesec}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fontspec}
+\usepackage{tcolorbox}
+
+% ----- Fonts (XeLaTeX/LuaLaTeX) -----
+\setmainfont{Times New Roman}
+
+% ----- Spacing -----
+\setstretch{1.05}
+\setlength{\parindent}{0pt}
+
+% ----- Headings style -----
+\titleformat{\section}{\Large\bfseries}{\thesection}{0.75em}{}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection}{0.75em}{}
+\titlespacing*{\section}{0pt}{10pt}{6pt}
+\titlespacing*{\subsection}{0pt}{8pt}{4pt}
+
+% ----- Lists -----
+\setlist[itemize]{leftmargin=1.2em, itemsep=3pt, topsep=4pt}
+\setlist[enumerate]{leftmargin=1.2em, itemsep=3pt, topsep=4pt}
+
+% ----- Table helpers -----
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+% ----- Small label for "Key Principle" -----
+\newcommand{\keylabel}[1]{\textbf{#1}}
+
+% ----- Button style -----
+\newcommand{\btn}[1]{%
+  \tcbox[
+    on line,
+    boxsep=2pt,
+    left=6pt,right=6pt,top=3pt,bottom=3pt,
+    colback=white,
+    colframe=black,
+    arc=2pt
+  ]{\textbf{#1}}%
+}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=black,
+  citecolor=black
+}
+
+\begin{document}
+
+\begin{center}
+{\LARGE \textbf{AI Matchmaking for Proof of Talk}}\\[4pt]
+{\large \textit{Connecting 2,500 Decision-Makers with the Right People}}
+\end{center}
+
+\section*{The Problem}
+
+Proof of Talk brings 2,500 leaders (approximately \$18T AUM) into one room, but high-value connections are still missed. Attendees often lack a fast way to identify the \textit{right} counterpart (capital $\leftrightarrow$ deal, bank $\leftrightarrow$ compliant infrastructure, buyer $\leftrightarrow$ seller) before the event begins. The value is not attendance volume but rather it is the quality of meetings.
+
+\section*{The Solution}
+
+Build an AI system that learns who each person is and what they need, then suggests 5--8 high-value matches before they even arrive.
+
+\section*{What Makes a Valuable Match?}
+
+This isn't a directory where you browse similar people. A valuable match creates potential for actual business outcomes: an investment opportunity (LP meets GP, investor meets founder), a partnership fit (bank meets custody provider), a buyer-seller relationship (institution seeking tokenization meets tokenization platform), or a critical dependency (protocol needing compliance infrastructure meets compliance-focused Layer 2). The system identifies connections where one party has what the other needs.
+
+\keylabel{Key Principle:} Match complementary people, not similar people.
+
+\begin{itemize}
+  \item Connect investors with founders, not investors with investors
+  \item Connect solution providers with people who have that problem
+  \item Connect buyers with sellers, not competitors with competitors
+\end{itemize}
+
+\section*{How It Works}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|Y|Y|Y|Y|}
+\hline
+\textbf{1. COLLECT} & \textbf{2. ANALYZE} & \textbf{3. MATCH} & \textbf{4. DELIVER} \\
+\hline
+Registration \quad LinkedIn \quad Company data \quad Social media &
+AI reads \& understands \quad Extracts goals \quad Identifies needs &
+Scores connections \quad Finds complementary pairs \quad Ranks by value &
+Personalized dashboard \quad 5--8 top matches \quad With explanations \\
+\hline
+\end{tabularx}
+\end{center}
+
+\subsection*{Step 1: Collect Rich Data}
+
+We gather information from multiple sources:
+\begin{itemize}
+  \item Registration form (what people tell us)
+  \item LinkedIn (their real expertise and experience)
+  \item Company websites (institutional goals and products)
+  \item Twitter/X (what they're thinking about right now)
+\end{itemize}
+
+\subsection*{Cold Start: Making It Work with Minimal Data}
+
+For new attendees or those with limited public data, we ask 3 simple questions during registration:
+\begin{enumerate}
+  \item ``What are you looking for at this event?'' (e.g., institutional LPs, compliant custody solutions, tokenization partners)
+  \item ``What can you offer to others?'' (e.g., capital allocation, technical infrastructure, regulatory expertise)
+  \item ``Pick your top 3 focus areas'' from a curated list (RWA tokenization, DeFi infrastructure, institutional custody, regulatory frameworks, ZK tech, etc.)
+\end{enumerate}
+
+These three questions give the system enough signal to make useful matches even without LinkedIn scraping.
+
+\subsection*{Step 2: AI Understanding}
+
+An LLM reads all this information and builds a smart profile:
+\begin{itemize}
+  \item What is their real expertise? (not just job title)
+  \item What are they looking for? (even if not explicitly stated)
+  \item What can they offer to others?
+\end{itemize}
+
+\subsection*{Step 3: Smart Matching}
+
+\textbf{Match Scoring Algorithm}
+
+\textbf{Final Match Score =}
+\begin{itemize}
+  \item 40\% Complementarity (A wants $\leftrightarrow$ B offers)
+  \item + 30\% Role Compatibility (Investor$\leftrightarrow$Founder, Bank$\leftrightarrow$Tech)
+  \item + 20\% Topic Overlap (RWA, custody, ZK, tokenization)
+  \item + 10\% Diversity Boost (novelty factor)
+\end{itemize}
+
+\textbf{How it works:}
+\begin{itemize}
+  \item \textbf{Complementarity (40\%):} Does person A want what person B offers? Investor $\leftrightarrow$ Founder, Bank $\leftrightarrow$ Tech provider, Buyer $\leftrightarrow$ Seller
+  \item \textbf{Role Compatibility (30\%):} Are they in natural counterparty roles? Capital allocator + Capital seeker, Protocol + Enterprise customer, Regulator + Innovator
+  \item \textbf{Topic Overlap (20\%):} Shared interests in RWA, custody, ZK tech, tokenization, DeFi, compliance, etc.
+  \item \textbf{Diversity Boost (10\%):} Intentional novelty to surface unexpected but valuable connections (avoid only matching the obvious)
+\end{itemize}
+
+\subsection*{Real Example}
+
+\begin{longtable}{L{2.6cm}L{3.0cm}L{3.2cm}L{3.2cm}L{3.3cm}}
+\toprule
+\textbf{Name} & \textbf{Role} & \textbf{Company Type} & \textbf{What They Have} & \textbf{What They Need} \\
+\midrule
+Sarah & Managing Director & Sovereign Wealth Fund & Capital to invest & Regulated tokenization platforms \\
+Marcus & CEO & Tokenization Startup & Real estate tokenization platform & Institutional investors \\
+Elena & Head of Digital Assets & European Bank & Bank infrastructure \& clients & Custody tech, compliance solutions \\
+Kenji & CTO & Layer 2 Protocol & Compliant blockchain infrastructure & Enterprise customers \\
+Aisha & GP & Crypto VC Fund & Investment capital & Deal flow, co-investors, LPs \\
+\bottomrule
+\end{longtable}
+
+Basic system: Matches Sarah with Marcus (obvious connection)
+
+Smart system: Also connects Kenji (compliance tech) with Elena (bank needing compliance), and suggests Aisha could fund Marcus while Sarah becomes Aisha's LP. Three deals from five people.
+
+\section*{What Attendees See}
+
+Each person gets a personalized web dashboard 3 days before the event with 5--8 carefully selected matches.
+
+\begin{tcolorbox}[
+  colback=white,
+  colframe=black,
+  boxrule=0.6pt,
+  arc=2pt,
+  left=10pt,right=10pt,top=10pt,bottom=10pt
+]
+\textbf{Marcus Weber}\\
+CEO, TokenizeNow \quad \textbullet \quad Tokenization Platform\\[8pt]
+
+\textbf{Why this match?}\\
+You're exploring institutional allocation to tokenized real-world assets. Marcus's platform tokenizes real estate and private credit on-chain, and he's actively seeking institutional investors. Direct product-to-capital fit.\\[8pt]
+
+\textbf{Conversation starters:}
+\begin{itemize}
+  \item What regulatory frameworks have you navigated?
+  \item Which asset classes see the most traction?
+\end{itemize}
+
+\btn{Request Introduction}\hspace{10pt}\btn{Save for Later}
+\end{tcolorbox}
+
+\section*{Privacy \& Consent}
+
+We take data privacy seriously with a tiered consent model:
+\begin{itemize}
+  \item \textbf{Default (works for everyone):} Matching uses only registration form data --- the three questions you answer plus basic info like company and role
+  \item \textbf{Opt-in enrichment:} Check a box to allow the system to enrich your profile using public LinkedIn, company website, and social media. Better matches, but you control it.
+  \item \textbf{Stealth mode:} For high-profile attendees (regulators, sovereign fund managers, public figures). Your profile is visible only at a high level (``Managing Director, Sovereign Wealth Fund'') and introductions require your manual approval. You still get matches, but you're not searchable.
+\end{itemize}
+
+\section*{Technology Stack}
+
+We're keeping the tech stack simple and realistic for a prototype:
+
+\begin{tabular}{L{4.0cm}L{11.0cm}}
+\toprule
+\textbf{Component} & \textbf{Technology} \\
+\midrule
+AI Intelligence & GPT-4 (OpenAI API) for semantic understanding \\
+Data Processing & Python + API integrations (LinkedIn, web scraping) \\
+Database & PostgreSQL with pgvector extension (handles both data \& embeddings) \\
+Web App & Next.js (React) --- mobile-responsive, no separate mobile app needed \\
+Hosting & Simple cloud deployment (Vercel/Railway + managed Postgres) \\
+\bottomrule
+\end{tabular}
+
+\subsection*{Why these choices?}
+
+\begin{itemize}
+  \item \textbf{GPT-4:} Best semantic (understanding) for extracting meaning from unstructured text (LinkedIn bios, company descriptions)
+  \item \textbf{Python:} Standard for AI/ML work, great libraries for data processing and API integrations
+  \item \textbf{PostgreSQL + pgvector:} Handles both structured data (users, matches) and semantic embeddings for similarity search in one database
+  \item \textbf{Next.js web app:} Fast, responsive, mobile-friendly. No separate mobile app needed for prototype --- works great on phones.
+\end{itemize}
+
+\textbf{Future enhancement:} Graph database (Neo4j) for advanced network analysis if we want multi-hop recommendations (``people who know people you should meet''). Not needed for MVP.
+
+\section*{Why This System is Different}
+
+\begin{tabular}{L{4.0cm}L{5.5cm}L{5.5cm}}
+\toprule
+\textbf{Feature} & \textbf{Standard Platforms} & \textbf{Our System} \\
+\midrule
+Data Sources & Registration only & LinkedIn + Company + Social + More \\
+Matching Logic & Keyword overlap & AI-powered complementary matching \\
+Match Quality & 20--50 random matches & 5--8 curated high-value matches \\
+Scoring Model & None or simple tags & 4-factor weighted algorithm \\
+Explanations & None & AI-written reason for each match \\
+\bottomrule
+\end{tabular}
+
+
+\end{document}
