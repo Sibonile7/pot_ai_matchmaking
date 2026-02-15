@@ -2,6 +2,7 @@ import pandas as pd
 import streamlit as st
 from matching import compute_matches
 
+st.info("Prototype demo using fictional data. No external scraping. Production version supports opt-in enrichment.")
 st.set_page_config(page_title="Proof of Talk — AI Matchmaking (Prototype)", layout="wide")
 
 @st.cache_data
