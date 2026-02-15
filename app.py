@@ -132,12 +132,13 @@ with right:
             # If you added breakdown fields in matching.py, show them (won't crash if missing)
             if all(k_ in m for k_ in ["comp", "role_fit", "topic", "novelty"]):
                 st.caption(
-                    f"Breakdown — Complementarity: {m['comp']:.2f} • "
-                    f"Role fit: {m['role_fit']:.2f} • "
-                    f"Topic: {m['topic']:.2f} • "
-                    f"Novelty: {m['novelty']:.2f}"
+                    f"Breakdown — Complementarity: {m['comp']*100:.0f}% • "
+                    f"Role fit: {m['role_fit']*100:.0f}% • "
+                    f"Topic: {m['topic']*100:.0f}% • "
+                    f"Novelty: {m['novelty']*100:.0f}%"
                 )
 
+               
             st.markdown("**Why this match?**")
             for line in m["why"]:
                 st.write(f"- {line}")
