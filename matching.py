@@ -173,7 +173,7 @@ def compute_matches(df: pd.DataFrame, idx: int, k: int = 8) -> List[Dict]:
 
         # Explanations
         why: List[str] = []
-        why.append(f"Complementarity (two-way): mutual want↔offer alignment (score {comp:.2f}).")
+        why.append(f"Complementarity (two-way): mutual want↔offer alignment ({comp*100:.0f}%).")
         why.append(f"Role fit: {a['type']} ↔ {b['type']} ({rf*100:.0f}%).")
 
 
