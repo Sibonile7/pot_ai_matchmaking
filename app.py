@@ -127,7 +127,7 @@ with right:
             st.write(f"**{b['role']}**, {b['org']}  \nType: {b['type']}")
 
             st.progress(min(1.0, float(m["score"])))
-            st.caption(f"Match score: {float(m['score']):.2f}")
+            st.caption(f"Match score: {float(m['score'])*100:.0f}%")
 
             # If you added breakdown fields in matching.py, show them (won't crash if missing)
             if all(k_ in m for k_ in ["comp", "role_fit", "topic", "novelty"]):
