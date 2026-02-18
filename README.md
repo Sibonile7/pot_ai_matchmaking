@@ -6,7 +6,6 @@ Each recommendation includes a **match score (with factor breakdown)**, a short 
 ## Live Links
 - **Streamlit Prototype:** https://potaimatchmaking-cjhux4hc8yh4pweadh4yrk.streamlit.app/
 - **Figma Wireframe:** https://www.figma.com/make/LiC9Hy2rV2pn94FGHeMVFU/Sibonile-Prototype-Figma?p=f&t=wwSHxT0YL52CV0A8-0&fullscreen=1
-- **GitHub Repo:** https://github.com/Sibonile7/pot_ai_matchmaking
 
 ## What’s Included
 - Fictional attendee dataset: `attendees.csv` (10 profiles)
